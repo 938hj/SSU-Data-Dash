@@ -1,0 +1,6 @@
+* text=auto eol=lf
+*.png binary
+*.joblib binary
+*.parquet binary
+submissions/**/*.csv linguist-generated=true
+figures/** linguist-generated=true

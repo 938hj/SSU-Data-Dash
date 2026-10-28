@@ -2,7 +2,8 @@
 
 By default the files are downloaded once from Hugging Face and kept in a cache on
 your computer, so later runs are instant. If you already have the files in a folder,
-point DATA_DIR at that folder instead and nothing is downloaded:
+put them in data/ next to this file, or point DATA_DIR at their folder.
+Local Parquet and CSV files are supported; neither option downloads data:
 
     macOS / Linux:       DATA_DIR=/path/to/folder python run.py validate
     Windows PowerShell:  $env:DATA_DIR = "C:/path/to/folder"; python run.py validate
@@ -38,6 +39,10 @@ def find_file(name):
     """Return the path of one data file, downloading it the first time."""
     stem = FILE_NAMES[name]
     folder = os.environ.get("DATA_DIR")
+    local = Path(__file__).resolve().parent / "data"
+    if not folder and any((local / (stem + ending)).is_file()
+                          for ending in (".parquet", ".csv")):
+        folder = str(local)          # the data folder next to this file, if it has the files
     if folder:
         for ending in (".parquet", ".csv"):
             path = Path(folder) / (stem + ending)

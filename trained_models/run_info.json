@@ -1,0 +1,35 @@
+{
+  "final": {
+    "off_market": "H1_om_hedge",
+    "list_aware": "H2_la_hedge"
+  },
+  "machine": "b2240-01",
+  "processor": "x86_64",
+  "cpu_count": 10,
+  "catboost_gpu_found": true,
+  "catboost_device_env": "",
+  "python": "3.13.15",
+  "versions": {
+    "pandas": "3.0.5",
+    "numpy": "2.5.3",
+    "scikit-learn": "1.9.1",
+    "scipy": "1.18.1",
+    "catboost": "1.2.10",
+    "lightgbm": "4.7.0"
+  },
+  "tracks": {
+    "off_market": {
+      "homes": 3974,
+      "seconds": 705.2,
+      "catboost_device": [
+        "GPU"
+      ]
+    },
+    "list_aware": {
+      "homes": 4064,
+      "seconds": 364.2,
+      "catboost_device": []
+    }
+  },
+  "total_seconds": 1070.0
+}

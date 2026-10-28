@@ -1,0 +1,2965 @@
+{
+  "final_selection": {
+    "off_market": "H1_om_hedge",
+    "list_aware": "H2_la_hedge"
+  },
+  "historical_final_runs": {
+    "H1_om_hedge": {
+      "summer23": {
+        "metrics": {
+          "off_market": {
+            "overall": {
+              "coverage80": 78.66,
+              "width80_pct": 21.32,
+              "n": 8302,
+              "mdape": 6.859,
+              "mape": 9.265,
+              "median_signed": 1.309,
+              "within_5": 38.77,
+              "within_10": 65.51
+            },
+            "by_month": {
+              "2023-06": {
+                "coverage80": 78.82,
+                "width80_pct": 21.44,
+                "n": 2649,
+                "mdape": 6.785,
+                "mape": 9.072,
+                "median_signed": -0.933,
+                "within_5": 39.34,
+                "within_10": 66.7
+              },
+              "2023-07": {
+                "coverage80": 78.91,
+                "width80_pct": 21.32,
+                "n": 2010,
+                "mdape": 6.697,
+                "mape": 9.046,
+                "median_signed": 0.996,
+                "within_5": 39.05,
+                "within_10": 65.67
+              },
+              "2023-08": {
+                "coverage80": 80.6,
+                "width80_pct": 21.32,
+                "n": 1856,
+                "mdape": 6.166,
+                "mape": 8.843,
+                "median_signed": 2.427,
+                "within_5": 42.19,
+                "within_10": 68.1
+              },
+              "2023-09": {
+                "coverage80": 76.11,
+                "width80_pct": 21.32,
+                "n": 1787,
+                "mdape": 7.712,
+                "mape": 10.236,
+                "median_signed": 4.181,
+                "within_5": 34.08,
+                "within_10": 60.88
+              }
+            },
+            "by_type": {
+              "Co-Op Apt": {
+                "coverage80": 73.91,
+                "width80_pct": 30.25,
+                "n": 23,
+                "mdape": 6.621,
+                "mape": 13.889,
+                "median_signed": 0.631,
+                "within_5": 30.43,
+                "within_10": 60.87
+              },
+              "Condo Apt": {
+                "coverage80": 79.34,
+                "width80_pct": 21.32,
+                "n": 4307,
+                "mdape": 5.542,
+                "mape": 7.517,
+                "median_signed": 1.433,
+                "within_5": 46.16,
+                "within_10": 74.39
+              },
+              "Condo Townhouse": {
+                "coverage80": 79.45,
+                "width80_pct": 21.44,
+                "n": 545,
+                "mdape": 5.622,
+                "mape": 7.1,
+                "median_signed": -1.787,
+                "within_5": 45.14,
+                "within_10": 76.88
+              },
+              "Detached": {
+                "coverage80": 77.51,
+                "width80_pct": 39.85,
+                "n": 2379,
+                "mdape": 9.575,
+                "mape": 11.973,
+                "median_signed": 2.9,
+                "within_5": 28.58,
+                "within_10": 51.83
+              },
+              "Freehold Townhouse": {
+                "coverage80": 85.44,
+                "width80_pct": 40.81,
+                "n": 261,
+                "mdape": 8.695,
+                "mape": 10.433,
+                "median_signed": 1.699,
+                "within_5": 31.8,
+                "within_10": 57.85
+              },
+              "Semi-Detached": {
+                "coverage80": 75.73,
+                "width80_pct": 34.43,
+                "n": 787,
+                "mdape": 9.374,
+                "mape": 11.621,
+                "median_signed": -1.335,
+                "within_5": 27.32,
+                "within_10": 53.11
+              }
+            }
+          }
+        },
+        "specification": {
+          "config": "H1_om_hedge",
+          "split": "summer23",
+          "spec": {
+            "off_market": {
+              "model": "blend",
+              "mean": "geometric",
+              "weights": [
+                1,
+                1,
+                1,
+                1,
+                1,
+                1
+              ],
+              "members": [
+                {
+                  "model": "tabular",
+                  "engine": "hgb",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "tfidf"
+                  ],
+                  "params": {
+                    "loss": "absolute_error"
+                  },
+                  "market": {
+                    "level_months": 3
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "lightgbm",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist"
+                  ],
+                  "params": {
+                    "objective": "regression_l1"
+                  },
+                  "market": {
+                    "level_months": 3
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "catboost",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist"
+                  ],
+                  "market": {
+                    "level_months": 3
+                  },
+                  "params": {
+                    "task_type": "GPU",
+                    "devices": "0",
+                    "iterations": 3000,
+                    "learning_rate": 0.05,
+                    "depth": 8,
+                    "border_count": 254,
+                    "max_ctr_complexity": 4,
+                    "loss_function": "MAE"
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "hgb",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "tfidf"
+                  ],
+                  "params": {
+                    "loss": "absolute_error"
+                  },
+                  "market": {
+                    "level_months": 6
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "lightgbm",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist"
+                  ],
+                  "params": {
+                    "objective": "regression_l1"
+                  },
+                  "market": {
+                    "level_months": 6
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "catboost",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist"
+                  ],
+                  "market": {
+                    "level_months": 6
+                  },
+                  "params": {
+                    "task_type": "GPU",
+                    "devices": "0",
+                    "iterations": 3000,
+                    "learning_rate": 0.05,
+                    "depth": 8,
+                    "border_count": 254,
+                    "max_ctr_complexity": 4,
+                    "loss_function": "MAE"
+                  }
+                }
+              ]
+            }
+          },
+          "seed": null,
+          "git": "a85b7f3",
+          "timing_seconds": {
+            "2023-06..2023-09/off_market": 437.5
+          },
+          "python": "3.13.15",
+          "versions": {
+            "pandas": "3.0.5",
+            "numpy": "2.5.3",
+            "sklearn": "1.9.1",
+            "catboost": "1.2.10",
+            "lightgbm": "4.7.0"
+          },
+          "ran_at": "2026-10-27 20:35:13",
+          "runner": "lab",
+          "machine": "b2240-01"
+        },
+        "original_file_sha256": {
+          "metrics.json": "b8065ad812fa82cd6cce5c426c7ae32865aca27ab05c7f8551a2a3bfac3bb8d6",
+          "spec.json": "832f2f6575b301bbed3f8b80c584abdd830f50577625bf3e1f4198f6015ad914"
+        }
+      },
+      "summer24": {
+        "metrics": {
+          "off_market": {
+            "overall": {
+              "coverage80": 78.56,
+              "width80_pct": 21.33,
+              "n": 7630,
+              "mdape": 6.542,
+              "mape": 9.023,
+              "median_signed": -0.351,
+              "within_5": 39.72,
+              "within_10": 67.25
+            },
+            "by_month": {
+              "2024-06": {
+                "coverage80": 78.78,
+                "width80_pct": 21.33,
+                "n": 2196,
+                "mdape": 6.407,
+                "mape": 8.897,
+                "median_signed": -1.456,
+                "within_5": 40.35,
+                "within_10": 68.12
+              },
+              "2024-07": {
+                "coverage80": 78.58,
+                "width80_pct": 21.33,
+                "n": 1886,
+                "mdape": 6.411,
+                "mape": 8.727,
+                "median_signed": -0.388,
+                "within_5": 40.56,
+                "within_10": 67.39
+              },
+              "2024-08": {
+                "coverage80": 78.12,
+                "width80_pct": 21.33,
+                "n": 1723,
+                "mdape": 6.518,
+                "mape": 9.135,
+                "median_signed": 0.254,
+                "within_5": 39.52,
+                "within_10": 67.27
+              },
+              "2024-09": {
+                "coverage80": 78.68,
+                "width80_pct": 21.33,
+                "n": 1825,
+                "mdape": 6.8,
+                "mape": 9.374,
+                "median_signed": 0.499,
+                "within_5": 38.3,
+                "within_10": 66.03
+              }
+            },
+            "by_type": {
+              "Co-Op Apt": {
+                "coverage80": 60.71,
+                "width80_pct": 27.99,
+                "n": 28,
+                "mdape": 10.326,
+                "mape": 14.793,
+                "median_signed": -3.244,
+                "within_5": 32.14,
+                "within_10": 42.86
+              },
+              "Condo Apt": {
+                "coverage80": 78.59,
+                "width80_pct": 21.33,
+                "n": 3700,
+                "mdape": 5.24,
+                "mape": 7.267,
+                "median_signed": -0.59,
+                "within_5": 47.97,
+                "within_10": 77.03
+              },
+              "Condo Townhouse": {
+                "coverage80": 79.65,
+                "width80_pct": 20.74,
+                "n": 516,
+                "mdape": 5.22,
+                "mape": 6.732,
+                "median_signed": 0.45,
+                "within_5": 47.29,
+                "within_10": 78.88
+              },
+              "Detached": {
+                "coverage80": 80.43,
+                "width80_pct": 36.43,
+                "n": 2417,
+                "mdape": 8.646,
+                "mape": 11.245,
+                "median_signed": 0.425,
+                "within_5": 29.42,
+                "within_10": 54.86
+              },
+              "Freehold Townhouse": {
+                "coverage80": 69.55,
+                "width80_pct": 34.0,
+                "n": 243,
+                "mdape": 8.516,
+                "mape": 10.987,
+                "median_signed": 1.733,
+                "within_5": 27.98,
+                "within_10": 55.97
+              },
+              "Semi-Detached": {
+                "coverage80": 75.07,
+                "width80_pct": 31.16,
+                "n": 726,
+                "mdape": 8.803,
+                "mape": 11.321,
+                "median_signed": -1.643,
+                "within_5": 30.85,
+                "within_10": 55.1
+              }
+            }
+          }
+        },
+        "specification": {
+          "config": "H1_om_hedge",
+          "split": "summer24",
+          "spec": {
+            "off_market": {
+              "model": "blend",
+              "mean": "geometric",
+              "weights": [
+                1,
+                1,
+                1,
+                1,
+                1,
+                1
+              ],
+              "members": [
+                {
+                  "model": "tabular",
+                  "engine": "hgb",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "tfidf"
+                  ],
+                  "params": {
+                    "loss": "absolute_error"
+                  },
+                  "market": {
+                    "level_months": 3
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "lightgbm",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist"
+                  ],
+                  "params": {
+                    "objective": "regression_l1"
+                  },
+                  "market": {
+                    "level_months": 3
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "catboost",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist"
+                  ],
+                  "market": {
+                    "level_months": 3
+                  },
+                  "params": {
+                    "task_type": "GPU",
+                    "devices": "0",
+                    "iterations": 3000,
+                    "learning_rate": 0.05,
+                    "depth": 8,
+                    "border_count": 254,
+                    "max_ctr_complexity": 4,
+                    "loss_function": "MAE"
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "hgb",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "tfidf"
+                  ],
+                  "params": {
+                    "loss": "absolute_error"
+                  },
+                  "market": {
+                    "level_months": 6
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "lightgbm",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist"
+                  ],
+                  "params": {
+                    "objective": "regression_l1"
+                  },
+                  "market": {
+                    "level_months": 6
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "catboost",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist"
+                  ],
+                  "market": {
+                    "level_months": 6
+                  },
+                  "params": {
+                    "task_type": "GPU",
+                    "devices": "0",
+                    "iterations": 3000,
+                    "learning_rate": 0.05,
+                    "depth": 8,
+                    "border_count": 254,
+                    "max_ctr_complexity": 4,
+                    "loss_function": "MAE"
+                  }
+                }
+              ]
+            }
+          },
+          "seed": null,
+          "git": "a85b7f3",
+          "timing_seconds": {
+            "2024-06..2024-09/off_market": 472.3
+          },
+          "python": "3.13.15",
+          "versions": {
+            "pandas": "3.0.5",
+            "numpy": "2.5.3",
+            "sklearn": "1.9.1",
+            "catboost": "1.2.10",
+            "lightgbm": "4.7.0"
+          },
+          "ran_at": "2026-10-27 20:46:49",
+          "runner": "lab",
+          "machine": "b2240-01"
+        },
+        "original_file_sha256": {
+          "metrics.json": "e0190ef16ac3c8bb94355fa0cd902bc4c34c989cf4e9936b445a58c74ccd3a16",
+          "spec.json": "cf101692a312ead2020d0897b75fd8c6a28c9b9374b95dfac4ad36f0dafcc56d"
+        }
+      },
+      "summer25": {
+        "metrics": {
+          "off_market": {
+            "overall": {
+              "coverage80": 76.18,
+              "width80_pct": 20.47,
+              "n": 8052,
+              "mdape": 6.877,
+              "mape": 9.486,
+              "median_signed": 1.745,
+              "within_5": 38.69,
+              "within_10": 64.64
+            },
+            "by_month": {
+              "2025-06": {
+                "coverage80": 78.23,
+                "width80_pct": 35.2,
+                "n": 2283,
+                "mdape": 6.813,
+                "mape": 9.034,
+                "median_signed": 1.145,
+                "within_5": 39.12,
+                "within_10": 65.7
+              },
+              "2025-07": {
+                "coverage80": 76.4,
+                "width80_pct": 20.47,
+                "n": 2068,
+                "mdape": 6.94,
+                "mape": 9.719,
+                "median_signed": 2.188,
+                "within_5": 39.22,
+                "within_10": 64.89
+              },
+              "2025-08": {
+                "coverage80": 74.67,
+                "width80_pct": 20.47,
+                "n": 1666,
+                "mdape": 6.861,
+                "mape": 9.677,
+                "median_signed": 2.414,
+                "within_5": 38.3,
+                "within_10": 64.47
+              },
+              "2025-09": {
+                "coverage80": 74.89,
+                "width80_pct": 20.47,
+                "n": 2035,
+                "mdape": 6.931,
+                "mape": 9.6,
+                "median_signed": 1.422,
+                "within_5": 37.99,
+                "within_10": 63.34
+              }
+            },
+            "by_type": {
+              "Co-Op Apt": {
+                "coverage80": 80.0,
+                "width80_pct": 28.66,
+                "n": 50,
+                "mdape": 9.636,
+                "mape": 13.764,
+                "median_signed": 1.377,
+                "within_5": 30.0,
+                "within_10": 52.0
+              },
+              "Condo Apt": {
+                "coverage80": 79.11,
+                "width80_pct": 20.47,
+                "n": 3623,
+                "mdape": 5.351,
+                "mape": 7.307,
+                "median_signed": 1.226,
+                "within_5": 47.25,
+                "within_10": 76.29
+              },
+              "Condo Townhouse": {
+                "coverage80": 65.52,
+                "width80_pct": 19.49,
+                "n": 554,
+                "mdape": 5.357,
+                "mape": 6.735,
+                "median_signed": 0.103,
+                "within_5": 46.57,
+                "within_10": 77.08
+              },
+              "Detached": {
+                "coverage80": 76.18,
+                "width80_pct": 35.2,
+                "n": 2683,
+                "mdape": 9.323,
+                "mape": 11.927,
+                "median_signed": 3.094,
+                "within_5": 30.08,
+                "within_10": 52.18
+              },
+              "Freehold Townhouse": {
+                "coverage80": 55.48,
+                "width80_pct": 39.09,
+                "n": 292,
+                "mdape": 11.365,
+                "mape": 13.832,
+                "median_signed": 6.948,
+                "within_5": 25.0,
+                "within_10": 45.21
+              },
+              "Semi-Detached": {
+                "coverage80": 77.53,
+                "width80_pct": 35.32,
+                "n": 850,
+                "mdape": 9.031,
+                "mape": 11.118,
+                "median_signed": 1.016,
+                "within_5": 29.41,
+                "within_10": 53.65
+              }
+            }
+          }
+        },
+        "specification": {
+          "config": "H1_om_hedge",
+          "split": "summer25",
+          "spec": {
+            "off_market": {
+              "model": "blend",
+              "mean": "geometric",
+              "weights": [
+                1,
+                1,
+                1,
+                1,
+                1,
+                1
+              ],
+              "members": [
+                {
+                  "model": "tabular",
+                  "engine": "hgb",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "tfidf"
+                  ],
+                  "params": {
+                    "loss": "absolute_error"
+                  },
+                  "market": {
+                    "level_months": 3
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "lightgbm",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist"
+                  ],
+                  "params": {
+                    "objective": "regression_l1"
+                  },
+                  "market": {
+                    "level_months": 3
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "catboost",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist"
+                  ],
+                  "market": {
+                    "level_months": 3
+                  },
+                  "params": {
+                    "task_type": "GPU",
+                    "devices": "0",
+                    "iterations": 3000,
+                    "learning_rate": 0.05,
+                    "depth": 8,
+                    "border_count": 254,
+                    "max_ctr_complexity": 4,
+                    "loss_function": "MAE"
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "hgb",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "tfidf"
+                  ],
+                  "params": {
+                    "loss": "absolute_error"
+                  },
+                  "market": {
+                    "level_months": 6
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "lightgbm",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist"
+                  ],
+                  "params": {
+                    "objective": "regression_l1"
+                  },
+                  "market": {
+                    "level_months": 6
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "catboost",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist"
+                  ],
+                  "market": {
+                    "level_months": 6
+                  },
+                  "params": {
+                    "task_type": "GPU",
+                    "devices": "0",
+                    "iterations": 3000,
+                    "learning_rate": 0.05,
+                    "depth": 8,
+                    "border_count": 254,
+                    "max_ctr_complexity": 4,
+                    "loss_function": "MAE"
+                  }
+                }
+              ]
+            }
+          },
+          "seed": null,
+          "git": "a85b7f3",
+          "timing_seconds": {
+            "2025-06..2025-09/off_market": 569.4
+          },
+          "python": "3.13.15",
+          "versions": {
+            "pandas": "3.0.5",
+            "numpy": "2.5.3",
+            "sklearn": "1.9.1",
+            "catboost": "1.2.10",
+            "lightgbm": "4.7.0"
+          },
+          "ran_at": "2026-10-27 21:00:33",
+          "runner": "lab",
+          "machine": "b2240-01"
+        },
+        "original_file_sha256": {
+          "metrics.json": "13386a38f8c1cf66dbfd60478c7426eddb30a994bedf627881e7d1d4bad474ef",
+          "spec.json": "4892445644e81b8255e4e5db48d32b03db26b09ee27e89b71518bc005572c560"
+        }
+      },
+      "rise21": {
+        "metrics": {
+          "off_market": {
+            "overall": {
+              "coverage80": 74.23,
+              "width80_pct": 24.53,
+              "n": 11828,
+              "mdape": 8.181,
+              "mape": 10.108,
+              "median_signed": -4.773,
+              "within_5": 32.26,
+              "within_10": 58.92
+            },
+            "by_month": {
+              "2021-10": {
+                "coverage80": 79.63,
+                "width80_pct": 24.53,
+                "n": 3717,
+                "mdape": 7.398,
+                "mape": 9.424,
+                "median_signed": -2.687,
+                "within_5": 36.43,
+                "within_10": 62.6
+              },
+              "2021-11": {
+                "coverage80": 77.36,
+                "width80_pct": 24.53,
+                "n": 3525,
+                "mdape": 7.609,
+                "mape": 9.753,
+                "median_signed": -3.253,
+                "within_5": 33.93,
+                "within_10": 61.62
+              },
+              "2021-12": {
+                "coverage80": 73.83,
+                "width80_pct": 24.53,
+                "n": 2270,
+                "mdape": 8.193,
+                "mape": 10.046,
+                "median_signed": -5.179,
+                "within_5": 32.03,
+                "within_10": 59.87
+              },
+              "2022-01": {
+                "coverage80": 61.18,
+                "width80_pct": 24.53,
+                "n": 2316,
+                "mdape": 10.312,
+                "mape": 11.808,
+                "median_signed": -9.493,
+                "within_5": 23.27,
+                "within_10": 47.97
+              }
+            },
+            "by_type": {
+              "Co-Op Apt": {
+                "coverage80": 54.24,
+                "width80_pct": 30.51,
+                "n": 59,
+                "mdape": 13.036,
+                "mape": 15.786,
+                "median_signed": -10.956,
+                "within_5": 23.73,
+                "within_10": 35.59
+              },
+              "Condo Apt": {
+                "coverage80": 75.53,
+                "width80_pct": 24.53,
+                "n": 6629,
+                "mdape": 6.557,
+                "mape": 8.201,
+                "median_signed": -3.266,
+                "within_5": 39.25,
+                "within_10": 68.83
+              },
+              "Condo Townhouse": {
+                "coverage80": 58.28,
+                "width80_pct": 24.51,
+                "n": 827,
+                "mdape": 9.278,
+                "mape": 10.417,
+                "median_signed": -8.225,
+                "within_5": 26.48,
+                "within_10": 53.81
+              },
+              "Detached": {
+                "coverage80": 80.09,
+                "width80_pct": 41.04,
+                "n": 2984,
+                "mdape": 10.788,
+                "mape": 12.679,
+                "median_signed": -6.446,
+                "within_5": 23.69,
+                "within_10": 46.45
+              },
+              "Freehold Townhouse": {
+                "coverage80": 55.98,
+                "width80_pct": 36.5,
+                "n": 368,
+                "mdape": 12.694,
+                "mape": 14.704,
+                "median_signed": -12.002,
+                "within_5": 15.22,
+                "within_10": 34.24
+              },
+              "Semi-Detached": {
+                "coverage80": 68.99,
+                "width80_pct": 35.18,
+                "n": 961,
+                "mdape": 11.614,
+                "mape": 12.904,
+                "median_signed": -7.843,
+                "within_5": 22.68,
+                "within_10": 44.54
+              }
+            }
+          }
+        },
+        "specification": {
+          "config": "H1_om_hedge",
+          "split": "rise21",
+          "spec": {
+            "off_market": {
+              "model": "blend",
+              "mean": "geometric",
+              "weights": [
+                1,
+                1,
+                1,
+                1,
+                1,
+                1
+              ],
+              "members": [
+                {
+                  "model": "tabular",
+                  "engine": "hgb",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "tfidf"
+                  ],
+                  "params": {
+                    "loss": "absolute_error"
+                  },
+                  "market": {
+                    "level_months": 3
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "lightgbm",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist"
+                  ],
+                  "params": {
+                    "objective": "regression_l1"
+                  },
+                  "market": {
+                    "level_months": 3
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "catboost",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist"
+                  ],
+                  "market": {
+                    "level_months": 3
+                  },
+                  "params": {
+                    "task_type": "GPU",
+                    "devices": "0",
+                    "iterations": 3000,
+                    "learning_rate": 0.05,
+                    "depth": 8,
+                    "border_count": 254,
+                    "max_ctr_complexity": 4,
+                    "loss_function": "MAE"
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "hgb",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "tfidf"
+                  ],
+                  "params": {
+                    "loss": "absolute_error"
+                  },
+                  "market": {
+                    "level_months": 6
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "lightgbm",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist"
+                  ],
+                  "params": {
+                    "objective": "regression_l1"
+                  },
+                  "market": {
+                    "level_months": 6
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "catboost",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist"
+                  ],
+                  "market": {
+                    "level_months": 6
+                  },
+                  "params": {
+                    "task_type": "GPU",
+                    "devices": "0",
+                    "iterations": 3000,
+                    "learning_rate": 0.05,
+                    "depth": 8,
+                    "border_count": 254,
+                    "max_ctr_complexity": 4,
+                    "loss_function": "MAE"
+                  }
+                }
+              ]
+            }
+          },
+          "seed": null,
+          "git": "a85b7f3",
+          "timing_seconds": {
+            "2021-10..2022-01/off_market": 192.8
+          },
+          "python": "3.13.15",
+          "versions": {
+            "pandas": "3.0.5",
+            "numpy": "2.5.3",
+            "sklearn": "1.9.1",
+            "catboost": "1.2.10",
+            "lightgbm": "4.7.0"
+          },
+          "ran_at": "2026-10-27 21:09:02",
+          "runner": "lab",
+          "machine": "b2240-01"
+        },
+        "original_file_sha256": {
+          "metrics.json": "af13611d484a8df788f64622429b4a9160018bd9420c0d7b6e863d1090fc9c48",
+          "spec.json": "dac64c2f2675ab56567a6acbf643ef8c8725a96bf8e0c24255969000551e7772"
+        }
+      },
+      "confirm": {
+        "metrics": {
+          "off_market": {
+            "overall": {
+              "coverage80": 79.98,
+              "width80_pct": 21.92,
+              "n": 4515,
+              "mdape": 7.115,
+              "mape": 9.448,
+              "median_signed": 0.833,
+              "within_5": 37.3,
+              "within_10": 64.72
+            },
+            "by_month": {
+              "2026-04": {
+                "coverage80": 80.13,
+                "width80_pct": 21.04,
+                "n": 2224,
+                "mdape": 7.455,
+                "mape": 9.543,
+                "median_signed": 2.362,
+                "within_5": 34.89,
+                "within_10": 63.8
+              },
+              "2026-05": {
+                "coverage80": 79.83,
+                "width80_pct": 33.49,
+                "n": 2291,
+                "mdape": 6.744,
+                "mape": 9.356,
+                "median_signed": -0.428,
+                "within_5": 39.63,
+                "within_10": 65.6
+              }
+            },
+            "by_type": {
+              "Co-Op Apt": {
+                "coverage80": 45.45,
+                "width80_pct": 30.13,
+                "n": 22,
+                "mdape": 17.206,
+                "mape": 22.988,
+                "median_signed": 12.075,
+                "within_5": 27.27,
+                "within_10": 45.45
+              },
+              "Condo Apt": {
+                "coverage80": 80.22,
+                "width80_pct": 21.04,
+                "n": 2007,
+                "mdape": 5.559,
+                "mape": 7.573,
+                "median_signed": 2.796,
+                "within_5": 44.94,
+                "within_10": 75.04
+              },
+              "Condo Townhouse": {
+                "coverage80": 80.3,
+                "width80_pct": 20.1,
+                "n": 264,
+                "mdape": 6.171,
+                "mape": 7.599,
+                "median_signed": 3.447,
+                "within_5": 39.77,
+                "within_10": 73.11
+              },
+              "Detached": {
+                "coverage80": 80.86,
+                "width80_pct": 38.15,
+                "n": 1531,
+                "mdape": 9.081,
+                "mape": 11.337,
+                "median_signed": -1.399,
+                "within_5": 29.98,
+                "within_10": 54.87
+              },
+              "Freehold Townhouse": {
+                "coverage80": 67.58,
+                "width80_pct": 37.3,
+                "n": 182,
+                "mdape": 10.347,
+                "mape": 11.979,
+                "median_signed": 1.528,
+                "within_5": 28.57,
+                "within_10": 48.9
+              },
+              "Semi-Detached": {
+                "coverage80": 82.12,
+                "width80_pct": 33.49,
+                "n": 509,
+                "mdape": 8.702,
+                "mape": 10.632,
+                "median_signed": -4.731,
+                "within_5": 31.43,
+                "within_10": 55.8
+              }
+            }
+          }
+        },
+        "specification": {
+          "config": "H1_om_hedge",
+          "split": "confirm",
+          "spec": {
+            "off_market": {
+              "model": "blend",
+              "mean": "geometric",
+              "weights": [
+                1,
+                1,
+                1,
+                1,
+                1,
+                1
+              ],
+              "members": [
+                {
+                  "model": "tabular",
+                  "engine": "hgb",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "tfidf"
+                  ],
+                  "params": {
+                    "loss": "absolute_error"
+                  },
+                  "market": {
+                    "level_months": 3
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "lightgbm",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist"
+                  ],
+                  "params": {
+                    "objective": "regression_l1"
+                  },
+                  "market": {
+                    "level_months": 3
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "catboost",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist"
+                  ],
+                  "market": {
+                    "level_months": 3
+                  },
+                  "params": {
+                    "task_type": "GPU",
+                    "devices": "0",
+                    "iterations": 3000,
+                    "learning_rate": 0.05,
+                    "depth": 8,
+                    "border_count": 254,
+                    "max_ctr_complexity": 4,
+                    "loss_function": "MAE"
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "hgb",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "tfidf"
+                  ],
+                  "params": {
+                    "loss": "absolute_error"
+                  },
+                  "market": {
+                    "level_months": 6
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "lightgbm",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist"
+                  ],
+                  "params": {
+                    "objective": "regression_l1"
+                  },
+                  "market": {
+                    "level_months": 6
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "catboost",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist"
+                  ],
+                  "market": {
+                    "level_months": 6
+                  },
+                  "params": {
+                    "task_type": "GPU",
+                    "devices": "0",
+                    "iterations": 3000,
+                    "learning_rate": 0.05,
+                    "depth": 8,
+                    "border_count": 254,
+                    "max_ctr_complexity": 4,
+                    "loss_function": "MAE"
+                  }
+                }
+              ]
+            }
+          },
+          "seed": null,
+          "git": "a85b7f3",
+          "timing_seconds": {
+            "2026-04/off_market": 578.4,
+            "2026-05/off_market": 726.0
+          },
+          "python": "3.13.15",
+          "versions": {
+            "pandas": "3.0.5",
+            "numpy": "2.5.3",
+            "sklearn": "1.9.1",
+            "catboost": "1.2.10",
+            "lightgbm": "4.7.0"
+          },
+          "ran_at": "2026-10-27 21:46:46",
+          "runner": "lab",
+          "machine": "b2240-01"
+        },
+        "original_file_sha256": {
+          "metrics.json": "aaefe00b1832e297b819d7df73deba22d74e1f1bd74e6dafb7986476e158ab02",
+          "spec.json": "0fb16c7ea27b97ff8d7c652ad42c471435ecf86fe42d020a106173872456f6f2"
+        }
+      }
+    },
+    "H2_la_hedge": {
+      "summer23": {
+        "metrics": {
+          "list_aware": {
+            "overall": {
+              "n": 8302,
+              "mdape": 4.773,
+              "mape": 5.833,
+              "median_signed": 0.995,
+              "within_5": 51.88,
+              "within_10": 82.84
+            },
+            "by_month": {
+              "2023-06": {
+                "n": 2649,
+                "mdape": 4.488,
+                "mape": 5.64,
+                "median_signed": -0.94,
+                "within_5": 54.21,
+                "within_10": 84.07
+              },
+              "2023-07": {
+                "n": 2010,
+                "mdape": 4.655,
+                "mape": 5.703,
+                "median_signed": 0.779,
+                "within_5": 53.23,
+                "within_10": 83.48
+              },
+              "2023-08": {
+                "n": 1856,
+                "mdape": 4.797,
+                "mape": 5.797,
+                "median_signed": 1.977,
+                "within_5": 51.94,
+                "within_10": 82.81
+              },
+              "2023-09": {
+                "n": 1787,
+                "mdape": 5.421,
+                "mape": 6.302,
+                "median_signed": 2.956,
+                "within_5": 46.84,
+                "within_10": 80.3
+              }
+            },
+            "by_type": {
+              "Co-Op Apt": {
+                "n": 23,
+                "mdape": 5.197,
+                "mape": 6.454,
+                "median_signed": 2.948,
+                "within_5": 47.83,
+                "within_10": 82.61
+              },
+              "Condo Apt": {
+                "n": 4307,
+                "mdape": 4.252,
+                "mape": 5.189,
+                "median_signed": 1.337,
+                "within_5": 56.86,
+                "within_10": 87.16
+              },
+              "Condo Townhouse": {
+                "n": 545,
+                "mdape": 4.583,
+                "mape": 5.592,
+                "median_signed": -0.577,
+                "within_5": 54.5,
+                "within_10": 83.49
+              },
+              "Detached": {
+                "n": 2379,
+                "mdape": 5.751,
+                "mape": 6.769,
+                "median_signed": 0.913,
+                "within_5": 43.97,
+                "within_10": 76.59
+              },
+              "Freehold Townhouse": {
+                "n": 261,
+                "mdape": 4.973,
+                "mape": 6.39,
+                "median_signed": 1.374,
+                "within_5": 50.57,
+                "within_10": 79.69
+              },
+              "Semi-Detached": {
+                "n": 787,
+                "mdape": 5.37,
+                "mape": 6.492,
+                "median_signed": -0.21,
+                "within_5": 47.27,
+                "within_10": 78.65
+              }
+            }
+          }
+        },
+        "specification": {
+          "config": "H2_la_hedge",
+          "split": "summer23",
+          "spec": {
+            "list_aware": {
+              "model": "blend",
+              "mean": "geometric",
+              "weights": [
+                0.2,
+                0.2,
+                0.4,
+                0.1,
+                0.1
+              ],
+              "members": [
+                {
+                  "model": "tabular",
+                  "engine": "hgb",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "list"
+                  ],
+                  "params": {
+                    "loss": "absolute_error"
+                  },
+                  "market": {
+                    "level_months": 3
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "hgb",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "list"
+                  ],
+                  "params": {
+                    "loss": "absolute_error"
+                  },
+                  "market": {
+                    "level_months": 6
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "hgb",
+                  "target": "log_list_ratio",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "list"
+                  ],
+                  "params": {
+                    "loss": "absolute_error"
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "ridge",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "list"
+                  ],
+                  "params": {
+                    "plus": true,
+                    "alpha": 3.0
+                  },
+                  "market": {
+                    "level_months": 3
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "ridge",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "list"
+                  ],
+                  "params": {
+                    "plus": true,
+                    "alpha": 3.0
+                  },
+                  "market": {
+                    "level_months": 6
+                  }
+                }
+              ]
+            }
+          },
+          "seed": null,
+          "git": "a85b7f3",
+          "timing_seconds": {
+            "2023-06..2023-09/list_aware": 219.9
+          },
+          "python": "3.13.15",
+          "versions": {
+            "pandas": "3.0.5",
+            "numpy": "2.5.3",
+            "sklearn": "1.9.1",
+            "catboost": "1.2.10",
+            "lightgbm": "4.7.0"
+          },
+          "ran_at": "2026-10-27 20:38:55",
+          "runner": "lab",
+          "machine": "b2240-01"
+        },
+        "original_file_sha256": {
+          "metrics.json": "e9316a495d5b6fb04440556e6f5d7f26d98a6ac7601954fc2fd81dd1cfd2e8e2",
+          "spec.json": "32a8666867d04dd9f0ff306e2dce28b0861409ac1ade722ec2738a0e3995a73b"
+        }
+      },
+      "summer24": {
+        "metrics": {
+          "list_aware": {
+            "overall": {
+              "n": 7630,
+              "mdape": 4.316,
+              "mape": 5.401,
+              "median_signed": -0.186,
+              "within_5": 56.19,
+              "within_10": 85.81
+            },
+            "by_month": {
+              "2024-06": {
+                "n": 2196,
+                "mdape": 4.313,
+                "mape": 5.532,
+                "median_signed": -0.742,
+                "within_5": 55.83,
+                "within_10": 84.84
+              },
+              "2024-07": {
+                "n": 1886,
+                "mdape": 4.434,
+                "mape": 5.584,
+                "median_signed": -0.199,
+                "within_5": 54.19,
+                "within_10": 84.62
+              },
+              "2024-08": {
+                "n": 1723,
+                "mdape": 4.195,
+                "mape": 5.234,
+                "median_signed": 0.047,
+                "within_5": 57.28,
+                "within_10": 86.94
+              },
+              "2024-09": {
+                "n": 1825,
+                "mdape": 4.294,
+                "mape": 5.211,
+                "median_signed": 0.31,
+                "within_5": 57.64,
+                "within_10": 87.12
+              }
+            },
+            "by_type": {
+              "Co-Op Apt": {
+                "n": 28,
+                "mdape": 4.276,
+                "mape": 5.483,
+                "median_signed": -1.83,
+                "within_5": 53.57,
+                "within_10": 82.14
+              },
+              "Condo Apt": {
+                "n": 3700,
+                "mdape": 3.553,
+                "mape": 4.541,
+                "median_signed": -0.483,
+                "within_5": 64.19,
+                "within_10": 90.76
+              },
+              "Condo Townhouse": {
+                "n": 516,
+                "mdape": 4.091,
+                "mape": 4.749,
+                "median_signed": -0.049,
+                "within_5": 58.91,
+                "within_10": 91.67
+              },
+              "Detached": {
+                "n": 2417,
+                "mdape": 5.37,
+                "mape": 6.442,
+                "median_signed": 0.589,
+                "within_5": 47.66,
+                "within_10": 79.27
+              },
+              "Freehold Townhouse": {
+                "n": 243,
+                "mdape": 5.933,
+                "mape": 6.556,
+                "median_signed": -0.092,
+                "within_5": 43.21,
+                "within_10": 77.78
+              },
+              "Semi-Detached": {
+                "n": 726,
+                "mdape": 5.463,
+                "mape": 6.393,
+                "median_signed": -0.46,
+                "within_5": 46.28,
+                "within_10": 80.99
+              }
+            }
+          }
+        },
+        "specification": {
+          "config": "H2_la_hedge",
+          "split": "summer24",
+          "spec": {
+            "list_aware": {
+              "model": "blend",
+              "mean": "geometric",
+              "weights": [
+                0.2,
+                0.2,
+                0.4,
+                0.1,
+                0.1
+              ],
+              "members": [
+                {
+                  "model": "tabular",
+                  "engine": "hgb",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "list"
+                  ],
+                  "params": {
+                    "loss": "absolute_error"
+                  },
+                  "market": {
+                    "level_months": 3
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "hgb",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "list"
+                  ],
+                  "params": {
+                    "loss": "absolute_error"
+                  },
+                  "market": {
+                    "level_months": 6
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "hgb",
+                  "target": "log_list_ratio",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "list"
+                  ],
+                  "params": {
+                    "loss": "absolute_error"
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "ridge",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "list"
+                  ],
+                  "params": {
+                    "plus": true,
+                    "alpha": 3.0
+                  },
+                  "market": {
+                    "level_months": 3
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "ridge",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "list"
+                  ],
+                  "params": {
+                    "plus": true,
+                    "alpha": 3.0
+                  },
+                  "market": {
+                    "level_months": 6
+                  }
+                }
+              ]
+            }
+          },
+          "seed": null,
+          "git": "a85b7f3",
+          "timing_seconds": {
+            "2024-06..2024-09/list_aware": 250.5
+          },
+          "python": "3.13.15",
+          "versions": {
+            "pandas": "3.0.5",
+            "numpy": "2.5.3",
+            "sklearn": "1.9.1",
+            "catboost": "1.2.10",
+            "lightgbm": "4.7.0"
+          },
+          "ran_at": "2026-10-27 20:51:02",
+          "runner": "lab",
+          "machine": "b2240-01"
+        },
+        "original_file_sha256": {
+          "metrics.json": "456d9a4aed72e2aa29f254e048d0f4bf580fb5abfb002be08294a4c60179b9ff",
+          "spec.json": "4e143cbe226317130adf6c56a3d5d03561479a1c9c46567f7ab04043ae672e45"
+        }
+      },
+      "summer25": {
+        "metrics": {
+          "list_aware": {
+            "overall": {
+              "n": 8052,
+              "mdape": 3.899,
+              "mape": 4.947,
+              "median_signed": 0.722,
+              "within_5": 60.39,
+              "within_10": 89.11
+            },
+            "by_month": {
+              "2025-06": {
+                "n": 2283,
+                "mdape": 3.939,
+                "mape": 5.032,
+                "median_signed": 0.765,
+                "within_5": 60.36,
+                "within_10": 88.87
+              },
+              "2025-07": {
+                "n": 2068,
+                "mdape": 3.837,
+                "mape": 4.941,
+                "median_signed": 0.876,
+                "within_5": 60.88,
+                "within_10": 88.88
+              },
+              "2025-08": {
+                "n": 1666,
+                "mdape": 4.044,
+                "mape": 4.926,
+                "median_signed": 0.561,
+                "within_5": 59.54,
+                "within_10": 89.68
+              },
+              "2025-09": {
+                "n": 2035,
+                "mdape": 3.807,
+                "mape": 4.877,
+                "median_signed": 0.654,
+                "within_5": 60.64,
+                "within_10": 89.14
+              }
+            },
+            "by_type": {
+              "Co-Op Apt": {
+                "n": 50,
+                "mdape": 3.442,
+                "mape": 4.453,
+                "median_signed": 1.203,
+                "within_5": 72.0,
+                "within_10": 96.0
+              },
+              "Condo Apt": {
+                "n": 3623,
+                "mdape": 3.166,
+                "mape": 3.864,
+                "median_signed": 0.274,
+                "within_5": 70.22,
+                "within_10": 96.11
+              },
+              "Condo Townhouse": {
+                "n": 554,
+                "mdape": 3.663,
+                "mape": 4.44,
+                "median_signed": 0.963,
+                "within_5": 63.54,
+                "within_10": 92.06
+              },
+              "Detached": {
+                "n": 2683,
+                "mdape": 4.723,
+                "mape": 5.854,
+                "median_signed": 1.549,
+                "within_5": 52.33,
+                "within_10": 83.3
+              },
+              "Freehold Townhouse": {
+                "n": 292,
+                "mdape": 4.907,
+                "mape": 5.986,
+                "median_signed": 1.575,
+                "within_5": 51.03,
+                "within_10": 81.16
+              },
+              "Semi-Detached": {
+                "n": 850,
+                "mdape": 5.565,
+                "mape": 6.708,
+                "median_signed": 1.021,
+                "within_5": 44.47,
+                "within_10": 78.0
+              }
+            }
+          }
+        },
+        "specification": {
+          "config": "H2_la_hedge",
+          "split": "summer25",
+          "spec": {
+            "list_aware": {
+              "model": "blend",
+              "mean": "geometric",
+              "weights": [
+                0.2,
+                0.2,
+                0.4,
+                0.1,
+                0.1
+              ],
+              "members": [
+                {
+                  "model": "tabular",
+                  "engine": "hgb",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "list"
+                  ],
+                  "params": {
+                    "loss": "absolute_error"
+                  },
+                  "market": {
+                    "level_months": 3
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "hgb",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "list"
+                  ],
+                  "params": {
+                    "loss": "absolute_error"
+                  },
+                  "market": {
+                    "level_months": 6
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "hgb",
+                  "target": "log_list_ratio",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "list"
+                  ],
+                  "params": {
+                    "loss": "absolute_error"
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "ridge",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "list"
+                  ],
+                  "params": {
+                    "plus": true,
+                    "alpha": 3.0
+                  },
+                  "market": {
+                    "level_months": 3
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "ridge",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "list"
+                  ],
+                  "params": {
+                    "plus": true,
+                    "alpha": 3.0
+                  },
+                  "market": {
+                    "level_months": 6
+                  }
+                }
+              ]
+            }
+          },
+          "seed": null,
+          "git": "a85b7f3",
+          "timing_seconds": {
+            "2025-06..2025-09/list_aware": 313.6
+          },
+          "python": "3.13.15",
+          "versions": {
+            "pandas": "3.0.5",
+            "numpy": "2.5.3",
+            "sklearn": "1.9.1",
+            "catboost": "1.2.10",
+            "lightgbm": "4.7.0"
+          },
+          "ran_at": "2026-10-27 21:05:48",
+          "runner": "lab",
+          "machine": "b2240-01"
+        },
+        "original_file_sha256": {
+          "metrics.json": "303f2023ffb2f8d33f2241f277f5e91f64fec10b1d9b97006461c02ca14feab4",
+          "spec.json": "6dbda169b5cc13243f4196b6f7a6370da349980938c0c7fe08de8ddcbc289567"
+        }
+      },
+      "rise21": {
+        "metrics": {
+          "list_aware": {
+            "overall": {
+              "n": 11828,
+              "mdape": 4.965,
+              "mape": 6.136,
+              "median_signed": -2.463,
+              "within_5": 50.28,
+              "within_10": 80.66
+            },
+            "by_month": {
+              "2021-10": {
+                "n": 3717,
+                "mdape": 4.653,
+                "mape": 5.785,
+                "median_signed": -1.585,
+                "within_5": 52.65,
+                "within_10": 83.35
+              },
+              "2021-11": {
+                "n": 3525,
+                "mdape": 4.845,
+                "mape": 5.844,
+                "median_signed": -1.511,
+                "within_5": 51.4,
+                "within_10": 82.61
+              },
+              "2021-12": {
+                "n": 2270,
+                "mdape": 4.866,
+                "mape": 6.096,
+                "median_signed": -2.313,
+                "within_5": 51.23,
+                "within_10": 80.48
+              },
+              "2022-01": {
+                "n": 2316,
+                "mdape": 5.954,
+                "mape": 7.181,
+                "median_signed": -5.192,
+                "within_5": 43.83,
+                "within_10": 73.58
+              }
+            },
+            "by_type": {
+              "Co-Op Apt": {
+                "n": 59,
+                "mdape": 6.033,
+                "mape": 6.882,
+                "median_signed": -4.676,
+                "within_5": 38.98,
+                "within_10": 72.88
+              },
+              "Condo Apt": {
+                "n": 6629,
+                "mdape": 4.636,
+                "mape": 5.689,
+                "median_signed": -1.88,
+                "within_5": 53.27,
+                "within_10": 83.65
+              },
+              "Condo Townhouse": {
+                "n": 827,
+                "mdape": 5.383,
+                "mape": 6.53,
+                "median_signed": -3.867,
+                "within_5": 45.71,
+                "within_10": 78.48
+              },
+              "Detached": {
+                "n": 2984,
+                "mdape": 5.678,
+                "mape": 6.838,
+                "median_signed": -3.208,
+                "within_5": 45.44,
+                "within_10": 76.17
+              },
+              "Freehold Townhouse": {
+                "n": 368,
+                "mdape": 4.511,
+                "mape": 6.214,
+                "median_signed": -2.453,
+                "within_5": 54.62,
+                "within_10": 80.71
+              },
+              "Semi-Detached": {
+                "n": 961,
+                "mdape": 5.379,
+                "mape": 6.618,
+                "median_signed": -3.205,
+                "within_5": 47.66,
+                "within_10": 76.38
+              }
+            }
+          }
+        },
+        "specification": {
+          "config": "H2_la_hedge",
+          "split": "rise21",
+          "spec": {
+            "list_aware": {
+              "model": "blend",
+              "mean": "geometric",
+              "weights": [
+                0.2,
+                0.2,
+                0.4,
+                0.1,
+                0.1
+              ],
+              "members": [
+                {
+                  "model": "tabular",
+                  "engine": "hgb",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "list"
+                  ],
+                  "params": {
+                    "loss": "absolute_error"
+                  },
+                  "market": {
+                    "level_months": 3
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "hgb",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "list"
+                  ],
+                  "params": {
+                    "loss": "absolute_error"
+                  },
+                  "market": {
+                    "level_months": 6
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "hgb",
+                  "target": "log_list_ratio",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "list"
+                  ],
+                  "params": {
+                    "loss": "absolute_error"
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "ridge",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "list"
+                  ],
+                  "params": {
+                    "plus": true,
+                    "alpha": 3.0
+                  },
+                  "market": {
+                    "level_months": 3
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "ridge",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "list"
+                  ],
+                  "params": {
+                    "plus": true,
+                    "alpha": 3.0
+                  },
+                  "market": {
+                    "level_months": 6
+                  }
+                }
+              ]
+            }
+          },
+          "seed": null,
+          "git": "a85b7f3",
+          "timing_seconds": {
+            "2021-10..2022-01/list_aware": 85.8
+          },
+          "python": "3.13.15",
+          "versions": {
+            "pandas": "3.0.5",
+            "numpy": "2.5.3",
+            "sklearn": "1.9.1",
+            "catboost": "1.2.10",
+            "lightgbm": "4.7.0"
+          },
+          "ran_at": "2026-10-27 21:10:30",
+          "runner": "lab",
+          "machine": "b2240-01"
+        },
+        "original_file_sha256": {
+          "metrics.json": "a1ce12ffa3ef1b97d35caa17131b94952ca42ab93afc226ad295ae0cf58b1da6",
+          "spec.json": "055dd982a6d9336378783519ad8cb25d526a5bc9c5f757f865cfe8e82bf42d78"
+        }
+      },
+      "confirm": {
+        "metrics": {
+          "list_aware": {
+            "overall": {
+              "n": 4515,
+              "mdape": 4.269,
+              "mape": 5.222,
+              "median_signed": 1.066,
+              "within_5": 57.08,
+              "within_10": 87.2
+            },
+            "by_month": {
+              "2026-04": {
+                "n": 2224,
+                "mdape": 4.382,
+                "mape": 5.274,
+                "median_signed": 1.909,
+                "within_5": 55.44,
+                "within_10": 87.72
+              },
+              "2026-05": {
+                "n": 2291,
+                "mdape": 4.131,
+                "mape": 5.172,
+                "median_signed": 0.235,
+                "within_5": 58.66,
+                "within_10": 86.69
+              }
+            },
+            "by_type": {
+              "Co-Op Apt": {
+                "n": 22,
+                "mdape": 7.794,
+                "mape": 8.333,
+                "median_signed": 5.435,
+                "within_5": 40.91,
+                "within_10": 68.18
+              },
+              "Condo Apt": {
+                "n": 2007,
+                "mdape": 3.394,
+                "mape": 3.993,
+                "median_signed": 1.688,
+                "within_5": 67.21,
+                "within_10": 95.52
+              },
+              "Condo Townhouse": {
+                "n": 264,
+                "mdape": 3.88,
+                "mape": 4.946,
+                "median_signed": 1.303,
+                "within_5": 60.23,
+                "within_10": 87.12
+              },
+              "Detached": {
+                "n": 1531,
+                "mdape": 5.123,
+                "mape": 6.251,
+                "median_signed": 0.712,
+                "within_5": 48.79,
+                "within_10": 80.4
+              },
+              "Freehold Townhouse": {
+                "n": 182,
+                "mdape": 6.197,
+                "mape": 7.051,
+                "median_signed": 1.631,
+                "within_5": 40.11,
+                "within_10": 73.08
+              },
+              "Semi-Detached": {
+                "n": 509,
+                "mdape": 5.252,
+                "mape": 6.325,
+                "median_signed": -2.171,
+                "within_5": 47.15,
+                "within_10": 80.75
+              }
+            }
+          }
+        },
+        "specification": {
+          "config": "H2_la_hedge",
+          "split": "confirm",
+          "spec": {
+            "list_aware": {
+              "model": "blend",
+              "mean": "geometric",
+              "weights": [
+                0.2,
+                0.2,
+                0.4,
+                0.1,
+                0.1
+              ],
+              "members": [
+                {
+                  "model": "tabular",
+                  "engine": "hgb",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "list"
+                  ],
+                  "params": {
+                    "loss": "absolute_error"
+                  },
+                  "market": {
+                    "level_months": 3
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "hgb",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "list"
+                  ],
+                  "params": {
+                    "loss": "absolute_error"
+                  },
+                  "market": {
+                    "level_months": 6
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "hgb",
+                  "target": "log_list_ratio",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "list"
+                  ],
+                  "params": {
+                    "loss": "absolute_error"
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "ridge",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "list"
+                  ],
+                  "params": {
+                    "plus": true,
+                    "alpha": 3.0
+                  },
+                  "market": {
+                    "level_months": 3
+                  }
+                },
+                {
+                  "model": "tabular",
+                  "engine": "ridge",
+                  "groups": [
+                    "base",
+                    "text",
+                    "hist",
+                    "list"
+                  ],
+                  "params": {
+                    "plus": true,
+                    "alpha": 3.0
+                  },
+                  "market": {
+                    "level_months": 6
+                  }
+                }
+              ]
+            }
+          },
+          "seed": null,
+          "git": "a85b7f3",
+          "timing_seconds": {
+            "2026-04/list_aware": 313.7,
+            "2026-05/list_aware": 398.0
+          },
+          "python": "3.13.15",
+          "versions": {
+            "pandas": "3.0.5",
+            "numpy": "2.5.3",
+            "sklearn": "1.9.1",
+            "catboost": "1.2.10",
+            "lightgbm": "4.7.0"
+          },
+          "ran_at": "2026-10-27 21:58:39",
+          "runner": "lab",
+          "machine": "b2240-01"
+        },
+        "original_file_sha256": {
+          "metrics.json": "256de652ff75be6672de6a6d203688b1c4b594881211d6f7104f624eec11bd60",
+          "spec.json": "a677522a54ae6b24e59429e73702df480833357fd3b84a4c4a952a502a06a47b"
+        }
+      }
+    }
+  },
+  "generation": {
+    "final": {
+      "off_market": "H1_om_hedge",
+      "list_aware": "H2_la_hedge"
+    },
+    "machine": "b2240-01",
+    "processor": "x86_64",
+    "cpu_count": 10,
+    "catboost_gpu_found": true,
+    "catboost_device_env": "",
+    "python": "3.13.15",
+    "versions": {
+      "pandas": "3.0.5",
+      "numpy": "2.5.3",
+      "scikit-learn": "1.9.1",
+      "scipy": "1.18.1",
+      "catboost": "1.2.10",
+      "lightgbm": "4.7.0"
+    },
+    "tracks": {
+      "off_market": {
+        "homes": 3974,
+        "seconds": 705.2,
+        "catboost_device": [
+          "GPU"
+        ]
+      },
+      "list_aware": {
+        "homes": 4064,
+        "seconds": 364.2,
+        "catboost_device": []
+      }
+    },
+    "total_seconds": 1070.0
+  },
+  "matched_generation_sha256": {
+    "trained_models/run_info.json": "13e0826c356658c4caf5aa729ee59465f197a5d0044b0c86bfb4c96440ca9828",
+    "submissions/run_info.json": "13e0826c356658c4caf5aa729ee59465f197a5d0044b0c86bfb4c96440ca9828",
+    "submissions/reference/run_info.json": "13e0826c356658c4caf5aa729ee59465f197a5d0044b0c86bfb4c96440ca9828",
+    "trained_models/off_market.joblib": "8ab2d4195883c6637d5ffd51b8ab211250745f8bef00dc27139e81a426fca4a1",
+    "submissions/submission_off_market.csv": "3864f855bbf73358593389feb0d70a5c7707ebc3708e5987e7a97c869ffdf4e9",
+    "submissions/reference/submission_off_market.csv": "7068cd0155aed76b4a78f19b930a709a31dc36f12527984617bfd79f40a0ce9d",
+    "trained_models/list_aware.joblib": "f8366af54072b078fb694b35afe40cf5e24fc833a562f707eec00f3e821d4eab",
+    "submissions/submission_list_aware.csv": "d91fefdf34d1495b7959fc97cdb7604860f3e6de94aca103daf65bf561ea4c64",
+    "submissions/reference/submission_list_aware.csv": "d91fefdf34d1495b7959fc97cdb7604860f3e6de94aca103daf65bf561ea4c64"
+  },
+  "learning_source_sha256": {
+    "configs.py": "af1d526580d18ab73baddc168b944b10fad9d777c418fe7f9f753406d18b06cc",
+    "models.py": "8b907aa796a114e9166b1c043245718cc6ebea9bf965f98a37a0fe1fb3260ac9",
+    "features.py": "beb80d8d22ca7a1a7565f9661cba301ede16da2d82609c427ef5a484e445e7ca",
+    "history.py": "cd49a0fa6fdd162dba5a64c0aef06109fb3852151811f9dfe99e5c97aee02ebb",
+    "market.py": "c8e2bf3afd20aed82eb2d8800743d5ebf5eddbf573827087c85443ba655b5787",
+    "text.py": "3b5a282fdbfc08078a526901236d7a02d9930ba5ad75fc303b22b26301f6f687"
+  },
+  "source_memory_sha256": "f172af167f1b285eadacead0b397de81cd5a7fea2836f0f69637e91ae5db880a",
+  "selection_note": "Selected for lower mean/worst-case error across market regimes, despite not meeting the original rule of improving every summer by at least 0.05 percentage points.",
+  "confirmation": {
+    "status": "complete",
+    "origin": "imported_lab_confirmation",
+    "reservation": "imported-b2240-01-H1-H2-20261027",
+    "final": {
+      "off_market": "H1_om_hedge",
+      "list_aware": "H2_la_hedge"
+    },
+    "imported_at_utc": "2026-10-28T02:51:21.636831+00:00",
+    "machine": "b2240-01",
+    "months": [
+      "2026-04",
+      "2026-05"
+    ],
+    "artifacts_sha256": {
+      "outputs/experiments/H1_om_hedge/confirm/metrics.json": "aaefe00b1832e297b819d7df73deba22d74e1f1bd74e6dafb7986476e158ab02",
+      "outputs/experiments/H1_om_hedge/confirm/spec.json": "0fb16c7ea27b97ff8d7c652ad42c471435ecf86fe42d020a106173872456f6f2",
+      "outputs/experiments/H2_la_hedge/confirm/metrics.json": "256de652ff75be6672de6a6d203688b1c4b594881211d6f7104f624eec11bd60",
+      "outputs/experiments/H2_la_hedge/confirm/spec.json": "a677522a54ae6b24e59429e73702df480833357fd3b84a4c4a952a502a06a47b"
+    },
+    "historical_source_git": {
+      "H1_om_hedge": "a85b7f3",
+      "H2_la_hedge": "a85b7f3"
+    },
+    "original_local_freeze_manifest_available": false,
+    "per_home_predictions_transferred": false,
+    "note": "Confirmation was completed in the lab before import. This is an imported consumed record, not a newly run campaign or a reconstructed historical source/data freeze."
+  },
+  "local_saved_prediction_verification": {
+    "status": "passed",
+    "results": {
+      "off_market": {
+        "rows": 3974,
+        "exact_matches": 3974,
+        "max_dollar_difference": 0.0
+      },
+      "list_aware": {
+        "rows": 4064,
+        "exact_matches": 4064,
+        "max_dollar_difference": 0.0
+      }
+    },
+    "seconds": 435.3,
+    "new_training": false,
+    "confirmation_rerun": false,
+    "structures": {
+      "off_market": {
+        "config": "H1_om_hedge",
+        "members": [
+          {
+            "engine": "hgb",
+            "target": "log_price",
+            "groups": [
+              "base",
+              "text",
+              "hist",
+              "tfidf"
+            ],
+            "market": {
+              "level_months": 3
+            },
+            "params": {
+              "loss": "absolute_error"
+            },
+            "training_rows": 150000,
+            "cutoff": "2026-06-01"
+          },
+          {
+            "engine": "lightgbm",
+            "target": "log_price",
+            "groups": [
+              "base",
+              "text",
+              "hist"
+            ],
+            "market": {
+              "level_months": 3
+            },
+            "params": {
+              "objective": "regression_l1"
+            },
+            "training_rows": 150000,
+            "cutoff": "2026-06-01"
+          },
+          {
+            "engine": "catboost",
+            "target": "log_price",
+            "groups": [
+              "base",
+              "text",
+              "hist"
+            ],
+            "market": {
+              "level_months": 3
+            },
+            "params": {
+              "task_type": "GPU",
+              "devices": "0",
+              "iterations": 3000,
+              "learning_rate": 0.05,
+              "depth": 8,
+              "border_count": 254,
+              "max_ctr_complexity": 4,
+              "loss_function": "MAE"
+            },
+            "training_rows": 150000,
+            "cutoff": "2026-06-01"
+          },
+          {
+            "engine": "hgb",
+            "target": "log_price",
+            "groups": [
+              "base",
+              "text",
+              "hist",
+              "tfidf"
+            ],
+            "market": {
+              "level_months": 6
+            },
+            "params": {
+              "loss": "absolute_error"
+            },
+            "training_rows": 150000,
+            "cutoff": "2026-06-01"
+          },
+          {
+            "engine": "lightgbm",
+            "target": "log_price",
+            "groups": [
+              "base",
+              "text",
+              "hist"
+            ],
+            "market": {
+              "level_months": 6
+            },
+            "params": {
+              "objective": "regression_l1"
+            },
+            "training_rows": 150000,
+            "cutoff": "2026-06-01"
+          },
+          {
+            "engine": "catboost",
+            "target": "log_price",
+            "groups": [
+              "base",
+              "text",
+              "hist"
+            ],
+            "market": {
+              "level_months": 6
+            },
+            "params": {
+              "task_type": "GPU",
+              "devices": "0",
+              "iterations": 3000,
+              "learning_rate": 0.05,
+              "depth": 8,
+              "border_count": 254,
+              "max_ctr_complexity": 4,
+              "loss_function": "MAE"
+            },
+            "training_rows": 150000,
+            "cutoff": "2026-06-01"
+          }
+        ],
+        "weights": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "list_aware": {
+        "config": "H2_la_hedge",
+        "members": [
+          {
+            "engine": "hgb",
+            "target": "log_price",
+            "groups": [
+              "base",
+              "text",
+              "hist",
+              "list"
+            ],
+            "market": {
+              "level_months": 3
+            },
+            "params": {
+              "loss": "absolute_error"
+            },
+            "training_rows": 150000,
+            "cutoff": "2026-06-01"
+          },
+          {
+            "engine": "hgb",
+            "target": "log_price",
+            "groups": [
+              "base",
+              "text",
+              "hist",
+              "list"
+            ],
+            "market": {
+              "level_months": 6
+            },
+            "params": {
+              "loss": "absolute_error"
+            },
+            "training_rows": 150000,
+            "cutoff": "2026-06-01"
+          },
+          {
+            "engine": "hgb",
+            "target": "log_list_ratio",
+            "groups": [
+              "base",
+              "text",
+              "hist",
+              "list"
+            ],
+            "market": null,
+            "params": {
+              "loss": "absolute_error"
+            },
+            "training_rows": 150000,
+            "cutoff": "2026-06-01"
+          },
+          {
+            "engine": "ridge",
+            "target": "log_price",
+            "groups": [
+              "base",
+              "text",
+              "hist",
+              "list"
+            ],
+            "market": {
+              "level_months": 3
+            },
+            "params": {
+              "plus": true,
+              "alpha": 3.0
+            },
+            "training_rows": 150000,
+            "cutoff": "2026-06-01"
+          },
+          {
+            "engine": "ridge",
+            "target": "log_price",
+            "groups": [
+              "base",
+              "text",
+              "hist",
+              "list"
+            ],
+            "market": {
+              "level_months": 6
+            },
+            "params": {
+              "plus": true,
+              "alpha": 3.0
+            },
+            "training_rows": 150000,
+            "cutoff": "2026-06-01"
+          }
+        ],
+        "weights": [
+          0.2,
+          0.2,
+          0.4,
+          0.1,
+          0.1
+        ]
+      }
+    }
+  },
+  "limitations": [
+    "Historical predictions.csv files and original freeze/source/data fingerprints were not transferred.",
+    "Full December-May validation cannot be assembled from summary metrics alone.",
+    "Saved-model CSV agreement verifies reproduction, not hidden-test accuracy.",
+    "Inner early-stop feature state, text targets and interval calibration retain the documented audit limitations."
+  ],
+  "historical_market_adjustment_controls": {
+    "A2_hgb_hist_l1/summer24": {
+      "overall": {
+        "coverage80": 73.62,
+        "width80_pct": 22.4,
+        "n": 7630,
+        "mdape": 7.89,
+        "mape": 10.661,
+        "median_signed": 4.574,
+        "within_5": 34.12,
+        "within_10": 59.17
+      },
+      "by_month": {
+        "2024-06": {
+          "coverage80": 79.74,
+          "width80_pct": 22.4,
+          "n": 2196,
+          "mdape": 6.668,
+          "mape": 9.317,
+          "median_signed": 1.751,
+          "within_5": 39.12,
+          "within_10": 65.44
+        },
+        "2024-07": {
+          "coverage80": 75.19,
+          "width80_pct": 22.4,
+          "n": 1886,
+          "mdape": 7.504,
+          "mape": 10.164,
+          "median_signed": 4.222,
+          "within_5": 35.84,
+          "within_10": 61.66
+        },
+        "2024-08": {
+          "coverage80": 69.65,
+          "width80_pct": 21.27,
+          "n": 1723,
+          "mdape": 8.674,
+          "mape": 11.266,
+          "median_signed": 6.223,
+          "within_5": 30.76,
+          "within_10": 56.07
+        },
+        "2024-09": {
+          "coverage80": 68.38,
+          "width80_pct": 22.4,
+          "n": 1825,
+          "mdape": 9.424,
+          "mape": 12.22,
+          "median_signed": 7.327,
+          "within_5": 29.48,
+          "within_10": 52.0
+        }
+      },
+      "source_sha256": "2d4c72fcef86eb261dd892979c482c60034d50fd40cd940dbd45ab8fa6aa24b4"
+    },
+    "M2_hgb_hist_l1_mkt/summer24": {
+      "overall": {
+        "coverage80": 78.1,
+        "width80_pct": 21.18,
+        "n": 7630,
+        "mdape": 6.663,
+        "mape": 9.189,
+        "median_signed": 0.13,
+        "within_5": 38.85,
+        "within_10": 66.8
+      },
+      "by_month": {
+        "2024-06": {
+          "coverage80": 78.64,
+          "width80_pct": 21.18,
+          "n": 2196,
+          "mdape": 6.568,
+          "mape": 8.992,
+          "median_signed": -0.956,
+          "within_5": 40.12,
+          "within_10": 67.9
+        },
+        "2024-07": {
+          "coverage80": 78.84,
+          "width80_pct": 21.18,
+          "n": 1886,
+          "mdape": 6.592,
+          "mape": 8.929,
+          "median_signed": 0.212,
+          "within_5": 38.92,
+          "within_10": 67.18
+        },
+        "2024-08": {
+          "coverage80": 77.71,
+          "width80_pct": 21.18,
+          "n": 1723,
+          "mdape": 6.75,
+          "mape": 9.353,
+          "median_signed": 0.574,
+          "within_5": 38.83,
+          "within_10": 66.34
+        },
+        "2024-09": {
+          "coverage80": 77.04,
+          "width80_pct": 21.18,
+          "n": 1825,
+          "mdape": 6.856,
+          "mape": 9.539,
+          "median_signed": 1.025,
+          "within_5": 37.26,
+          "within_10": 65.53
+        }
+      },
+      "source_sha256": "615437ec7df630954a52ad956147092f57bb9c57281bf94e6be3db986253abdf"
+    },
+    "A2_hgb_hist_l1/summer25": {
+      "overall": {
+        "coverage80": 73.32,
+        "width80_pct": 20.32,
+        "n": 8052,
+        "mdape": 8.149,
+        "mape": 11.083,
+        "median_signed": 4.914,
+        "within_5": 33.11,
+        "within_10": 58.3
+      },
+      "by_month": {
+        "2025-06": {
+          "coverage80": 77.14,
+          "width80_pct": 34.87,
+          "n": 2283,
+          "mdape": 7.506,
+          "mape": 9.768,
+          "median_signed": 2.439,
+          "within_5": 36.31,
+          "within_10": 63.07
+        },
+        "2025-07": {
+          "coverage80": 73.55,
+          "width80_pct": 20.32,
+          "n": 2068,
+          "mdape": 7.724,
+          "mape": 11.11,
+          "median_signed": 4.879,
+          "within_5": 34.19,
+          "within_10": 59.82
+        },
+        "2025-08": {
+          "coverage80": 70.65,
+          "width80_pct": 20.32,
+          "n": 1666,
+          "mdape": 8.565,
+          "mape": 11.715,
+          "median_signed": 6.504,
+          "within_5": 32.11,
+          "within_10": 55.46
+        },
+        "2025-09": {
+          "coverage80": 71.01,
+          "width80_pct": 20.32,
+          "n": 2035,
+          "mdape": 9.071,
+          "mape": 12.014,
+          "median_signed": 6.74,
+          "within_5": 29.24,
+          "within_10": 53.71
+        }
+      },
+      "source_sha256": "4a2f38944bf848ee49d185fdfb0b87ee3023e3cb2e55a5f0b08cab2d20d337b7"
+    },
+    "M2_hgb_hist_l1_mkt/summer25": {
+      "overall": {
+        "coverage80": 75.24,
+        "width80_pct": 20.49,
+        "n": 8052,
+        "mdape": 6.938,
+        "mape": 9.48,
+        "median_signed": 0.859,
+        "within_5": 37.98,
+        "within_10": 64.75
+      },
+      "by_month": {
+        "2025-06": {
+          "coverage80": 77.09,
+          "width80_pct": 35.39,
+          "n": 2283,
+          "mdape": 7.025,
+          "mape": 9.099,
+          "median_signed": 0.176,
+          "within_5": 37.93,
+          "within_10": 65.53
+        },
+        "2025-07": {
+          "coverage80": 75.68,
+          "width80_pct": 20.49,
+          "n": 2068,
+          "mdape": 6.888,
+          "mape": 9.661,
+          "median_signed": 1.32,
+          "within_5": 37.81,
+          "within_10": 64.75
+        },
+        "2025-08": {
+          "coverage80": 73.53,
+          "width80_pct": 20.49,
+          "n": 1666,
+          "mdape": 6.883,
+          "mape": 9.654,
+          "median_signed": 1.456,
+          "within_5": 37.76,
+          "within_10": 64.23
+        },
+        "2025-09": {
+          "coverage80": 74.1,
+          "width80_pct": 20.49,
+          "n": 2035,
+          "mdape": 6.951,
+          "mape": 9.582,
+          "median_signed": 0.704,
+          "within_5": 38.38,
+          "within_10": 64.32
+        }
+      },
+      "source_sha256": "168aa0b32d40c17530b3f86ce23bc6cff8020d2ba7b2e9bbac31596524449116"
+    }
+  },
+  "local_synthetic_tests": {
+    "passed": 45,
+    "warnings": 6,
+    "seconds": 179.33,
+    "data": "synthetic/temporary only",
+    "gpu_test_training": false
+  }
+}

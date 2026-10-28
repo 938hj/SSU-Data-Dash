@@ -1,16 +1,22 @@
-# Data and everything the scripts write
+# Local data, environments, IDE state and caches
 data/
-outputs/
-reports/
-figures/
-submissions/
-
-# Python and notebook clutter
+.venv/
+.venv-final/
+venv/
+.idea/
 __pycache__/
 .pytest_cache/
 .ipynb_checkpoints/
-.venv/
-venv/
+.coverage
+htmlcov/
+*.log
 .DS_Store
 .Rhistory
 report/*.pdf
+
+# Generated experiment files stay local. Preserve one-look confirmation records.
+outputs/*
+!outputs/final_freeze.json
+!outputs/final_confirmation.json
+
+# Retained intentionally: submissions/, trained_models/, selected reports/ and figures/.

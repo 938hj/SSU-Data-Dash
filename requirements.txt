@@ -1,9 +1,16 @@
-# Install with:  pip install -r requirements.txt   (Python 3.10 or newer)
-pandas==2.3.3
-numpy==2.2.6; python_version < "3.14"
-numpy==2.3.5; python_version >= "3.14"
-pyarrow==22.0.0
-scikit-learn==1.7.2
-matplotlib==3.10.9
-huggingface_hub==2.1.1
-pytest==8.4.2
+# Install once with: python -m pip install -r requirements.txt (tested on Python 3.13)
+# These are the exact versions the reported results were produced with.
+pandas==3.0.5
+numpy==2.5.3
+pyarrow==26.0.0
+scikit-learn==1.9.1
+scipy==1.18.1
+catboost==1.2.10
+lightgbm==4.7.0
+matplotlib==3.11.2
+huggingface_hub==2.3.0
+pytest==9.1.1
+joblib==1.6.0
+
+# Include the complete pinned environment through the standard entry point.
+-r requirements.lock.txt

@@ -1,0 +1,28 @@
+{
+  "status": "complete",
+  "origin": "imported_lab_confirmation",
+  "reservation": "imported-b2240-01-H1-H2-20261027",
+  "final": {
+    "off_market": "H1_om_hedge",
+    "list_aware": "H2_la_hedge"
+  },
+  "imported_at_utc": "2026-10-28T02:51:21.636831+00:00",
+  "machine": "b2240-01",
+  "months": [
+    "2026-04",
+    "2026-05"
+  ],
+  "artifacts_sha256": {
+    "outputs/experiments/H1_om_hedge/confirm/metrics.json": "aaefe00b1832e297b819d7df73deba22d74e1f1bd74e6dafb7986476e158ab02",
+    "outputs/experiments/H1_om_hedge/confirm/spec.json": "0fb16c7ea27b97ff8d7c652ad42c471435ecf86fe42d020a106173872456f6f2",
+    "outputs/experiments/H2_la_hedge/confirm/metrics.json": "256de652ff75be6672de6a6d203688b1c4b594881211d6f7104f624eec11bd60",
+    "outputs/experiments/H2_la_hedge/confirm/spec.json": "a677522a54ae6b24e59429e73702df480833357fd3b84a4c4a952a502a06a47b"
+  },
+  "historical_source_git": {
+    "H1_om_hedge": "a85b7f3",
+    "H2_la_hedge": "a85b7f3"
+  },
+  "original_local_freeze_manifest_available": false,
+  "per_home_predictions_transferred": false,
+  "note": "Confirmation was completed in the lab before import. This is an imported consumed record, not a newly run campaign or a reconstructed historical source/data freeze."
+}

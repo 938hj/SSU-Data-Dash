@@ -60,6 +60,8 @@ def test_a_later_sale_next_door_is_not_used():
     listings = make_listings(400)
     home = listings.iloc[[0]].assign(ml_num="SYN-8888888", latitude=44.0, date_listed=pd.Timestamp("2026-01-15"))
     next_door = home.assign(ml_num="SYN-9999999", date_sold=pd.Timestamp("2026-02-01"), sold_price=1e9)
+    next_door = next_door.astype({"date_listed": listings["date_listed"].dtype,
+                                "date_sold": listings["date_sold"].dtype})
     model = models.NearestSalesBaseline(k=1).fit(pd.concat([listings, next_door]))
     assert model.predict(data.hide_answers(home, "off_market"))[0] < 1e9
 
@@ -127,6 +129,26 @@ def test_metrics_on_known_errors():
 # ---- every command runs end to end on tiny files ----
 
 def test_whole_pipeline_on_tiny_data(tmp_path, monkeypatch):
+    import copy
+    import configs
+
+    def small_model(track):
+        spec = copy.deepcopy(configs.CONFIGS[configs.FINAL[track]][track])
+        for member in spec["members"]:
+            params = member.setdefault("params", {})
+            if member["engine"] == "catboost":
+                params.update(iterations=12, depth=3, border_count=32,
+                              max_ctr_complexity=1, task_type="CPU")
+                params.pop("devices", None)
+                member["threads"] = 1
+            elif member["engine"] == "hgb":
+                params["max_iter"] = 12
+            elif member["engine"] == "lightgbm":
+                params["n_estimators"] = 12
+                member["threads"] = 1
+        return models.build_model(spec, track)
+
+    monkeypatch.setattr(models, "make_model", small_model)
     folder = tmp_path / "data"
     folder.mkdir()
     make_listings(1500).to_parquet(folder / "listings.parquet")
@@ -140,4 +162,49 @@ def test_whole_pipeline_on_tiny_data(tmp_path, monkeypatch):
     run.report()
     run.predict()
     assert run.check()
+    original = {track: (tmp_path / "submissions" / f"submission_{track}.csv").read_bytes()
+                for track in run.TRACKS}
+    run.predict_saved()
+    for track in run.TRACKS:
+        assert (tmp_path / "submissions" / f"submission_{track}.csv").read_bytes() == original[track]
     assert (tmp_path / "figures" / "error_by_price_range.png").exists()
+
+
+
+@pytest.mark.parametrize("ending", [".parquet", ".csv"])
+def test_project_local_data_loads_from_a_different_working_directory(tmp_path, monkeypatch, ending):
+    project = tmp_path / "project"
+    folder = project / "data"
+    folder.mkdir(parents=True)
+    elsewhere = tmp_path / "another-working-directory"
+    elsewhere.mkdir()
+    expected = pd.DataFrame({"ml_num": ["SYN-1234567"], "date_listed": [pd.Timestamp("2026-06-01")]})
+    path = folder / ("test_off_market" + ending)
+    if ending == ".csv":
+        expected.to_csv(path, index=False)
+    else:
+        expected.to_parquet(path, index=False)
+    monkeypatch.delenv("DATA_DIR", raising=False)
+    monkeypatch.setattr(data, "__file__", str(project / "data.py"))
+    monkeypatch.chdir(elsewhere)
+    actual = data.load("off_market")
+    pd.testing.assert_frame_equal(actual, expected)
+
+
+def test_missing_local_data_uses_the_official_download_source(tmp_path, monkeypatch):
+    import huggingface_hub
+    project = tmp_path / "project"
+    project.mkdir()
+    downloaded = tmp_path / "cached-test-input.parquet"
+    pd.DataFrame({"ml_num": ["SYN-1234567"]}).to_parquet(downloaded, index=False)
+    calls = []
+
+    def download(repo, filename, repo_type):
+        calls.append((repo, filename, repo_type))
+        return str(downloaded)
+
+    monkeypatch.delenv("DATA_DIR", raising=False)
+    monkeypatch.setattr(data, "__file__", str(project / "data.py"))
+    monkeypatch.setattr(huggingface_hub, "hf_hub_download", download)
+    assert data.load("off_market")["ml_num"].tolist() == ["SYN-1234567"]
+    assert calls == [("Baliyang/SSU_data_dash", "test_off_market.parquet", "dataset")]
